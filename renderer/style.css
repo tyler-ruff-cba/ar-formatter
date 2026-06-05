@@ -1,0 +1,32 @@
+body {
+    font-family: Arial, sans-serif;
+    padding: 40px;
+}
+
+.container {
+    max-width: 500px;
+}
+
+input {
+    display: block;
+    margin-bottom: 15px;
+    padding: 10px;
+}
+
+input[type=submit]{
+    margin-top:10px;
+}
+
+fieldset{
+    display:block;
+    margin: 5px 0px;
+}
+
+button {
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+#status {
+    margin-top: 20px;
+}

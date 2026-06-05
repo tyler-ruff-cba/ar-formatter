@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AR FORMATTER - CBA Utils</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="container">
+
+        <h1>
+            A/R Formatter
+        </h1>
+
+        <form>
+            <!--
+            <input
+                type="file"
+                id="fileInput"
+                accept=".xlsx"
+            />
+            -->
+            <fieldset>
+                <legend>Upload File</legend>
+                <input 
+                    type="text"
+                    id="uploadedFilePath"
+                    value="Please select a file..."
+                    readonly
+                    disabled
+                    name="uploadedFilePath"
+                />
+
+                <input 
+                    type="button"
+                    id="fileUpload"
+                    value="Upload Files"
+                />
+            </fieldset>
+            <fieldset>
+                <legend>Set Date Range</legend>
+                <input
+                    type="text"
+                    id="dateRanges"
+                    placeholder="5/2026,6/2026,7/2026"
+                />
+            </fieldset>
+
+            <input 
+                type="submit"
+                value="Start Process"
+                id="submitBtn"
+            />
+            <!--
+            <button id="submitBtn">
+                Process File
+            </button>
+            -->
+            
+            <button
+                id="downloadBtn"
+                style="display:none;"
+            >
+                Download Processed File
+            </button>
+
+        </form>
+
+        <div id="status"></div>
+
+    </div>
+
+    <script src="renderer.js"></script>
+
+</body>
+</html>

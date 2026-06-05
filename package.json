@@ -1,0 +1,30 @@
+{
+  "name": "ar-formatter",
+  "version": "0.0.2",
+  "description": "Electron app which trims and formats weekly 7 spreadsheets for the AR-Proc app",
+  "keywords": [
+    "ar",
+    "accounts",
+    "cba"
+  ],
+  "homepage": "https://github.com/tyler-ruff-cba/ar-formatter#readme",
+  "bugs": {
+    "url": "https://github.com/tyler-ruff-cba/ar-formatter/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tyler-ruff-cba/ar-formatter.git"
+  },
+  "license": "MIT",
+  "author": "tyler-ruff-cba",
+  "type": "commonjs",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "electron": "^42.3.3",
+    "exceljs": "^4.4.0"
+  }
+}
