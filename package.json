@@ -1,6 +1,6 @@
 {
   "name": "ar-formatter",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "Electron app which trims and formats weekly 7 spreadsheets for the AR-Proc app",
   "keywords": [
     "ar",

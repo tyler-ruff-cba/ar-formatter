@@ -13,6 +13,68 @@ function deepClone(obj) {
     return obj ? JSON.parse(JSON.stringify(obj)) : obj;
 }
 
+/* Pull Admin name from the file name */
+function getAdminName(inputFile) {
+
+    const fileName =
+        path.basename(inputFile);
+
+    const match =
+        fileName.match(/^(.*?)\s*-\s*Weekly/i);
+
+    if (match) {
+        return match[1].trim();
+    }
+
+    return "UNKNOWN";
+}
+
+/* Determine last day in user range */
+function getRangeEndingDate(dateRangeString) {
+
+    const months = dateRangeString
+        .split(",")
+        .map(x => x.trim())
+        .filter(Boolean)
+        .map(item => {
+
+            const [month, year] =
+                item.split("/");
+
+            return {
+                month: parseInt(month),
+                year: parseInt(year)
+            };
+        });
+
+    if (!months.length) {
+        return "";
+    }
+
+    months.sort((a, b) => {
+
+        if (a.year !== b.year) {
+            return a.year - b.year;
+        }
+
+        return a.month - b.month;
+    });
+
+    const last =
+        months[months.length - 1];
+
+    const lastDay =
+        new Date(
+            last.year,
+            last.month,
+            0
+        );
+
+    return (
+        `${last.month}/${lastDay.getDate()}/${last.year}`
+    );
+}
+
 /* Copy a cell exactly
 function copyCell(sourceCell, targetCell) {
 
@@ -91,6 +153,8 @@ function copyCell(sourceCell, targetCell) {
             sourceCell.numFmt;
     }
 
+    // Update formula 
+    
     if (
         sourceCell.value &&
         sourceCell.value.formula
@@ -115,11 +179,37 @@ function copyCell(sourceCell, targetCell) {
           formula
       };
   }
+ 
+  /*
+  if (
+      sourceCell.value &&
+      typeof sourceCell.value === "object"
+  ) {
+
+      if (sourceCell.value.formula) {
+
+          targetCell.value = {
+              formula: sourceCell.value.formula
+          };
+
+          return;
+      }
+
+      if (sourceCell.value.sharedFormula) {
+
+          targetCell.value =
+              sourceCell.result ?? null;
+
+          return;
+      }
+  }
+  */
 }
 
 /* Parse list of supplied months 
   ex: 5/2026,6/2026,7/2026
 */
+/*
 function parseMonthRanges(rangeString) {
     const allowed = new Set();
 
@@ -136,7 +226,32 @@ function parseMonthRanges(rangeString) {
 
     return allowed;
 }
+*/
 
+function parseMonthRanges(rangeString) {
+
+    const allowed = new Set();
+
+    rangeString
+        .split(",")
+        .map(x => x.trim())
+        .forEach(item => {
+
+            const [month, year] = item.split("/");
+
+            if (!month || !year) {
+                return;
+            }
+
+            allowed.add(
+                `${parseInt(month)}/${parseInt(year)}`
+            );
+        });
+
+    return allowed;
+}
+
+/*
 function excelDateToJSDate(value) {
 
     if (!value) return null;
@@ -156,6 +271,40 @@ function excelDateToJSDate(value) {
     }
 
     return null;
+}
+    */
+
+function excelDateToJSDate(value) {
+
+    if (!value) return null;
+
+    if (value instanceof Date) {
+        return value;
+    }
+
+    if (typeof value === "number") {
+
+        const excelEpoch =
+            new Date(Date.UTC(1899, 11, 30));
+
+        return new Date(
+            excelEpoch.getTime() +
+            value * 86400000
+        );
+    }
+
+    if (
+        typeof value === "object" &&
+        value.result instanceof Date
+    ) {
+        return value.result;
+    }
+
+    const parsed = new Date(value);
+
+    return isNaN(parsed)
+        ? null
+        : parsed;
 }
 
 function isYellowColor(argb) {
@@ -223,74 +372,6 @@ function rowContainsYellow(row) {
 
     return coloredCells >= 3;
 }
-
-
-/*
-async function processWorkbook(
-  inputFile,
-  dateRangeString
-) {
-
-  const workbook = new ExcelJS.Workbook();
-
-  await workbook.xlsx.readFile(inputFile);
-
-  const sheet = workbook.getWorksheet(1);
-
-  const outputWorkbook = new ExcelJS.Workbook();
-
-  const outputSheet =
-    outputWorkbook.addWorksheet("Filtered");
-
-  // Parse:
-  // 5/2026,6/2026,7/2026
-
-  const allowedMonths =
-    dateRangeString
-      .split(",")
-      .map(x => x.trim());
-
-  // Copy headers
-
-  const header = sheet.getRow(1);
-
-  outputSheet.addRow(header.values);
-
-  // Example:
-  // Assume column A contains dates
-
-  sheet.eachRow((row, rowNumber) => {
-
-    if (rowNumber === 1) {
-      return;
-    }
-
-    const dateValue = row.getCell(1).value;
-
-    if (!dateValue) {
-      return;
-    }
-
-    const date = new Date(dateValue);
-
-    const monthYear =
-      `${date.getMonth() + 1}/${date.getFullYear()}`;
-
-    if (allowedMonths.includes(monthYear)) {
-      outputSheet.addRow(row.values);
-    }
-  });
-
-  const outputPath = path.join(
-    os.tmpdir(),
-    `processed-${Date.now()}.xlsx`
-  );
-
-  await outputWorkbook.xlsx.writeFile(outputPath);
-
-  return outputPath;
-}
-*/
 
 async function processWorkbook(inputFile, dateRangeString) {
 
@@ -429,11 +510,17 @@ async function processWorkbook(inputFile, dateRangeString) {
                 return;
             }
 
+            /*
             const monthKey =
                 `${reportDate.getMonth() + 1}-${reportDate.getFullYear()}`;
 
             const inDateRange =
                 allowedMonths.has(monthKey);
+            */
+            //const monthKey = `${reportDate.getMonth() + 1}/${reportDate.getFullYear()}`;
+            const monthKey = `${reportDate.getUTCMonth() + 1}/${reportDate.getUTCFullYear()}`;
+
+            const inDateRange = allowedMonths.has(monthKey);
 
             if (!inDateRange) {
                 return;
@@ -496,6 +583,29 @@ async function processWorkbook(inputFile, dateRangeString) {
         os.tmpdir(),
         `filtered-${Date.now()}.xlsx`
     );
+
+    const adminName = getAdminName(inputFile);
+
+    const rangeEndDate = getRangeEndingDate(dateRangeString);
+
+    /*
+    outputSheet.spliceRows(
+        1,
+        0,
+        [`${adminName} A/R to ${rangeEndDate}`]
+    );
+
+    const titleRow = outputSheet.getRow(1);
+
+    titleRow.font = {
+        bold: true,
+        size: 14
+    };
+
+    titleRow.alignment = {
+        horizontal: "center"
+    };
+    */
 
     await outputWorkbook.xlsx.writeFile(
         outputPath
