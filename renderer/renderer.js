@@ -19,13 +19,14 @@ document
 
     let absolutePath = null;
 
-    const file =
-      document.getElementById("fileInput").files[0];
-
+    //const file = document.getElementById("fileInput").files[0];
+    const filePath = document.getElementById('uploadedFilePath').value;
+    /*
     if (!file) {
       alert("Please select a file.");
       return;
     }
+    */
 
     const dateRanges =
       document.getElementById("dateRanges").value;
@@ -35,7 +36,7 @@ document
 
     generatedFile =
       await window.electronAPI.processFile({
-        filePath: file.path,
+        filePath: filePath,
         dateRanges
       });
 
