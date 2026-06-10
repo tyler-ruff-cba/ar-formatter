@@ -39,8 +39,8 @@ jobs:
       - name: Install Dependencies
         run: npm ci
 
-      - name: Build Application
-        run: npm run build
+#      - name: Build Application
+#        run: npm run build
 
       #
       # Electron Builder Example
