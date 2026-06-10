@@ -21,10 +21,14 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
+    "build": "vite build",
+    "dist": "electron-builder --x64",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
     "electron": "^42.3.3",
-    "exceljs": "^4.4.0"
+    "exceljs": "^4.4.0",
+    "vite": "^8.0.16",
+    "electron-builder": "^26.15.2"
   }
 }
