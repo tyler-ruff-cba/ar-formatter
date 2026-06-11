@@ -19,7 +19,7 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "dist": "electron-builder --x64",
+    "dist": "electron-builder --x64 --publish explicitly",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {
@@ -34,7 +34,7 @@
     "email": "rufft@cbamoney.com"
   },
   "mac": {
-     "icon": "assets/macos/icon.icns"
+     "icon": "assets/macos/cba_icon_favicon.icns"
   },
   "homepage": "https://cbautils.com/ar-formatter",
   "build": {
