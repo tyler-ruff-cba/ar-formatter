@@ -7,7 +7,6 @@
     "accounts",
     "cba"
   ],
-  "homepage": "https://github.com/tyler-ruff-cba/ar-formatter#readme",
   "bugs": {
     "url": "https://github.com/tyler-ruff-cba/ar-formatter/issues"
   },
@@ -16,7 +15,6 @@
     "url": "git+https://github.com/tyler-ruff-cba/ar-formatter.git"
   },
   "license": "MIT",
-  "author": "tyler-ruff-cba",
   "type": "commonjs",
   "main": "main.js",
   "scripts": {
@@ -31,6 +29,11 @@
   "dependencies": {
     "exceljs": "^4.4.0"  
   },
+  "author": {
+    "name": "Tyler Ruff",
+    "email": "rufft@cbamoney.com"
+  },
+  "homepage": "https://cbautils.com/ar-formatter",
   "build": {
     "appId": "com.cbautils.arformatter",
 
