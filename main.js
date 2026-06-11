@@ -13,8 +13,7 @@ function createWindow() {
     }
   });
 
-  /* ICONS */
-
+  /* ICONS 
   // Windows
   if (process.platform === 'win32') {
     win.setIcon(path.join(__dirname, './assets/windows/icon.ico'));
@@ -24,6 +23,7 @@ function createWindow() {
   if (process.platform === 'linux') {
     win.setIcon(path.join(__dirname, './assets/linux/icons/512x512.png'));
   }
+  */
 
   // macOS - set in package.json or electron-builder config
 

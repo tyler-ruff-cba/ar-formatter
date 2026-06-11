@@ -33,9 +33,6 @@
     "name": "Tyler Ruff",
     "email": "rufft@cbamoney.com"
   },
-  "mac": {
-     "icon": "assets/macos/cba_icon_favicon.icns"
-  },
   "homepage": "https://cbautils.com/ar-formatter",
   "build": {
     "appId": "com.cbautils.arformatter",
