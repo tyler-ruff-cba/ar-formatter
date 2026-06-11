@@ -19,7 +19,7 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "dist": "electron-builder --x64 --publish explicitly",
+    "dist": "electron-builder --x64 --publish always",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {
