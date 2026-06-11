@@ -1,6 +1,6 @@
 {
   "name": "ar-formatter",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Electron app which trims and formats weekly 7 spreadsheets for the AR-Proc app",
   "keywords": [
     "ar",
@@ -19,7 +19,7 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "dist": "electron-builder --x64 --publish always",
+    "dist": "electron-builder --x64",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {
@@ -32,6 +32,9 @@
   "author": {
     "name": "Tyler Ruff",
     "email": "rufft@cbamoney.com"
+  },
+  "mac": {
+     "icon": "assets/macos/icon.icns"
   },
   "homepage": "https://cbautils.com/ar-formatter",
   "build": {

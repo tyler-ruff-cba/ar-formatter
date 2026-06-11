@@ -1,25 +1,24 @@
 let generatedFile = null;
 
-document
-    .getElementById("fileUpload")
-    .addEventListener("click", async () => {
-        const file = 
-            await window.electronAPI.uploadFile();
-        if(file === undefined){
-            document.getElementById("uploadedFilePath").value = "Please select a file...";
-            return;
-        }
-        console.log(file);
-        document.getElementById("uploadedFilePath").value = file;
-    });
+async function uploadFile(){
+  const file = await window.electronAPI.uploadFile();
+  if(file === undefined){
+      document.getElementById('uploadedFilePath').value = "Please select a file...";
+      return;
+  }
+  console.log(`File uploaded:${file}`);
+  document.getElementById('uploadedFilePath').value = file;
+}
+
+document.getElementById('fileUpload').addEventListener('click', uploadFile);
+document.getElementById('uploadedFilePath').addEventListener('click', uploadFile);
 
 document
-  .getElementById("submitBtn")
-  .addEventListener("click", async () => {
+  .getElementById('submitBtn')
+  .addEventListener('click', async () => {
 
     let absolutePath = null;
 
-    //const file = document.getElementById("fileInput").files[0];
     const filePath = document.getElementById('uploadedFilePath').value;
     /*
     if (!file) {
@@ -28,11 +27,9 @@ document
     }
     */
 
-    const dateRanges =
-      document.getElementById("dateRanges").value;
+    const dateRanges = document.getElementById('dateRanges').value;
 
-    document.getElementById("status").innerText =
-      "Processing...";
+    document.getElementById('status').innerText = "Processing...";
 
     generatedFile =
       await window.electronAPI.processFile({
@@ -40,17 +37,14 @@ document
         dateRanges
       });
 
-    document.getElementById("status").innerText =
-      "Finished.";
+    document.getElementById('status').innerText = "Finished.";
 
-    document.getElementById("downloadBtn").style.display =
-      "inline-block";
+    document.getElementById('downloadBtn').style.display = "inline-block";
   });
 
 document
-  .getElementById("downloadBtn")
-  .addEventListener("click", async () => {
-
+  .getElementById('downloadBtn')
+  .addEventListener('click', async () => {
     await window.electronAPI.saveOutput(
       generatedFile
     );

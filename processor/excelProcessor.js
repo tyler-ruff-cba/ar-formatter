@@ -433,6 +433,23 @@ async function processWorkbook(inputFile, dateRangeString) {
     const adminName = getAdminName(inputFile);
     const rangeEndDate = getRangeEndingDate(dateRangeString);
 
+    outputSheet.spliceRows(
+        1,
+        0,
+        [`${adminName} A/R to ${rangeEndDate}`]
+    );
+    
+    const titleRow = outputSheet.getRow(1);
+
+    titleRow.font = {
+        bold: true,
+        size: 14
+    };
+
+    titleRow.alignment = {
+        horizontal: "center"
+    };
+
     outputWorkbook.calcProperties = {
         fullCalcOnLoad: true
     };
