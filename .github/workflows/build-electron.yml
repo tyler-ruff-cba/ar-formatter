@@ -47,7 +47,7 @@ jobs:
           mkdir release-files
 
           if [ "${{ matrix.platform }}" = "windows" ]; then
-            find dist -name "*.exe" -exec cp {} release-files/ \;
+            find dist -maxdepth 1 -name "*Setup*.exe" -exec cp {} release-files/ \;
             find dist -name "*.msi" -exec cp {} release-files/ \;
           fi
 
