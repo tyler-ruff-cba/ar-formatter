@@ -17,102 +17,120 @@ jobs:
       matrix:
         include:
           - os: windows-latest
-            platform: win
+            platform: windows
           - os: macos-latest
-            platform: mac
+            platform: macos
           - os: ubuntu-latest
             platform: linux
 
     runs-on: ${{ matrix.os }}
 
     steps:
-      - name: Checkout repo
+      - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Setup Node
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
 
-      - name: Install dependencies
+      - name: Install Dependencies
         run: npm ci
 
-      # Build electron app
-      - name: Build app
+      - name: Build Electron App
         run: npm run dist
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # Rename artifacts per platform
-      - name: Prepare artifacts
+      - name: Collect Release Files
         shell: bash
         run: |
-          mkdir -p release-artifacts
-          cp -r dist/* release-artifacts/ || true
+          mkdir release-files
 
-      - name: Upload artifacts
+          if [ "${{ matrix.platform }}" = "windows" ]; then
+            find dist -name "*.exe" -exec cp {} release-files/ \;
+            find dist -name "*.msi" -exec cp {} release-files/ \;
+          fi
+
+          if [ "${{ matrix.platform }}" = "macos" ]; then
+            find dist -name "*.dmg" -exec cp {} release-files/ \;
+            find dist -name "*.zip" -exec cp {} release-files/ \;
+          fi
+
+          if [ "${{ matrix.platform }}" = "linux" ]; then
+            find dist -name "*.AppImage" -exec cp {} release-files/ \;
+            find dist -name "*.deb" -exec cp {} release-files/ \;
+          fi
+
+      - name: Rename Release Files
+        shell: bash
+        run: |
+          if [ "${{ matrix.platform }}" = "windows" ]; then
+            for f in release-files/*.exe; do
+              mv "$f" "release-files/AR-Formatter-Windows-x64.exe"
+            done
+          fi
+
+          if [ "${{ matrix.platform }}" = "macos" ]; then
+            for f in release-files/*.dmg; do
+              mv "$f" "release-files/AR-Formatter-macOS-x64.dmg"
+            done
+          fi
+
+          if [ "${{ matrix.platform }}" = "linux" ]; then
+            for f in release-files/*.AppImage; do
+              mv "$f" "release-files/AR-Formatter-Linux-x64.AppImage"
+            done
+          fi
+          
+      - name: Upload Platform Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ matrix.platform }}-build
-          path: release-artifacts/**
+          name: ${{ matrix.platform }}
+          path: release-files/*
 
   release:
     needs: build
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
+      - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Get version from package.json
+      - name: Get Version From package.json
         id: version
         run: |
           VERSION=$(node -p "require('./package.json').version")
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
-      - name: Download all artifacts
+      - name: Download Build Artifacts
         uses: actions/download-artifact@v4
         with:
-          path: dist
+          path: release-assets
 
-      # If release already exists, bump version safely
-      - name: Resolve unique version
-        id: bump
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const base = "${{ steps.version.outputs.version }}";
+      - name: Generate Release Notes
+        run: |
+          cat > RELEASE_NOTES.md << 'EOF'
+          # Downloads
 
-            async function exists(tag) {
-              try {
-                await github.rest.repos.getReleaseByTag({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  tag
-                });
-                return true;
-              } catch {
-                return false;
-              }
-            }
+          ## Windows
+          Download the .exe installer.
 
-            let version = base;
-            let i = 1;
+          ## macOS
+          Download the .dmg installer.
 
-            while (await exists(`v${version}`)) {
-              version = `${base}-${i}`;
-              i++;
-            }
+          ## Linux
+          Download the .AppImage or .deb package.
+          EOF
 
-            core.setOutput("version", version);
-            core.setOutput("tag", `v${version}`);
-
-      - name: Create Release
+      - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ steps.bump.outputs.tag }}
-          name: Release ${{ steps.bump.outputs.version }}
-          files: dist/**/*
+          tag_name: v${{ steps.version.outputs.version }}
+          name: AR Formatter v${{ steps.version.outputs.version }}
+          body_path: RELEASE_NOTES.md
+          files: |
+            release-assets/windows/*
+            release-assets/macos/*
+            release-assets/linux/*
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
