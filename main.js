@@ -28,7 +28,10 @@ function createWindow() {
   // macOS - set in package.json or electron-builder config
 
 
-  win.loadFile("./renderer/index.html");
+  //win.loadFile("./renderer/index.html");
+  win.loadFile(
+    path.join(__dirname, "renderer", "index.html")
+  );
 }
 
 async function selectLocalFile() {

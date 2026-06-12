@@ -36,7 +36,9 @@
   "homepage": "https://cbautils.com/ar-formatter",
   "build": {
     "appId": "com.cbautils.arformatter",
-
+    "files": [
+      "**/*"
+    ],
     "win": {
       "target": ["nsis"]
     },
