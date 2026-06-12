@@ -132,4 +132,4 @@ jobs:
             release-assets/macos/*
             release-assets/linux/*
         env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
