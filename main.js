@@ -6,7 +6,7 @@ const { processWorkbook } = require("./processor/excelProcessor");
 function createWindow() {
   const win = new BrowserWindow({
     width: 700,
-    height: 500,
+    height: 600,
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
       contextIsolation: true
@@ -68,7 +68,13 @@ ipcMain.handle("process-file", async (_, data) => {
 
 ipcMain.handle("save-output", async (_, sourcePath) => {
   const result = await dialog.showSaveDialog({
-    defaultPath: "processed.xlsx"
+    title: "Save Processed File",
+    defaultPath: "processed.xlsx",
+    buttonLabel: 'Save Document',
+    filters: [
+      { name: 'Excel Files', extensions: ['xlsx'] },
+      { name: 'All Files', extensions: ['*'] }
+    ]
   });
 
   if (result.canceled) {

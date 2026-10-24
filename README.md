@@ -2,7 +2,6 @@
 Desktop application build with Electron which formats Weekly 7 spreadsheets to be processed by the A/R Processor app.
 
 ## Build Instructions
-**Note: The only way to run this in DEV is by building it. The end user binaries will not be released until the project is production ready.**
 
 To build, first ensure your computer has Node.js and NPM installed.
 
@@ -14,3 +13,5 @@ npm install
 ```sh
 npm start
 ```
+
+

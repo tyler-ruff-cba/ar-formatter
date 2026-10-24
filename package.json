@@ -1,6 +1,6 @@
 {
   "name": "ar-formatter",
-  "version": "0.2.2",
+  "version": "1.0.0",
   "description": "Electron app which trims and formats weekly 7 spreadsheets for the AR-Proc app",
   "keywords": [
     "ar",
@@ -19,6 +19,7 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
+    "dev": "electron . --enable-logging --trace-warnings",
     "dist": "electron-builder --x64 --publish never",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

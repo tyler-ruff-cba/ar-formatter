@@ -142,17 +142,6 @@ function copyCell(sourceCell, targetCell) {
         typeof value === "object" &&
         typeof value.formula === "string"
     ) {
-        /*
-        targetCell.value = {
-            formula: value.formula
-        };
-        */
-        
-        //targetCell.value = value;
-        /*
-        targetCell.value =
-            value.result ?? 0;
-        */
        targetCell.value =
         value.result !== undefined &&
         value.result !== null
@@ -377,7 +366,6 @@ async function processWorkbook(inputFile, dateRangeString) {
                 return;
             }
 
-            //const monthKey = `${reportDate.getMonth() + 1}/${reportDate.getFullYear()}`;
             // Using UTC time instead of local time to prevent selecting 5/1 contracts if the range is 1,2,3,4 (for example)
             const monthKey = `${reportDate.getUTCMonth() + 1}/${reportDate.getUTCFullYear()}`;
 
@@ -447,7 +435,7 @@ async function processWorkbook(inputFile, dateRangeString) {
     };
 
     titleRow.alignment = {
-        horizontal: "center"
+        horizontal: "left"
     };
 
     outputWorkbook.calcProperties = {

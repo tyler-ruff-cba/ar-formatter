@@ -27,6 +27,26 @@ button {
     cursor: pointer;
 }
 
+.file-upload-section {
+    display: flex;
+    align-items: center;
+}
+
+.file-upload-path{
+    display: inline-block;
+    width:350px;
+    margin-right: 5px;
+}
+
+.file-upload-btn{
+    display: inline-block;
+}
+
+.date-range-input{
+    display: inline-block;
+    width: 450px;
+}
+
 #status {
     margin-top: 20px;
 }
